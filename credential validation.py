@@ -21,10 +21,10 @@ def userdict(data):
     return user_list
 
 
-@app.route("/user", methods=['POST'])
+@app.route("/user", methods=['POST','GET','DELETE','PATCH'])
 # function to add and validate new user
 def add_user():
-    # if request.method == 'POST':
+    if request.method == 'POST':
         email_pattern = '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'
         password_pattern = '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
         req = request.get_json()
@@ -47,17 +47,20 @@ def add_user():
                 return res
         else:
             res = make_response("Username or Email Already", 400)
-            return res       
+            return res      
+
+    if request.method == 'GET':
+        cur.execute("select * from credentials")
+        rows = cur.fetchall()
+        data = userdict(rows)
+        res = make_response(jsonify(data), 200)
+        return res
+
 
 
 @app.route("/user", methods=['GET'])
 # function to get all users
-def get_all_users():
-    cur.execute("select * from credentials")
-    rows = cur.fetchall()
-    data = userdict(rows)
-    res = make_response(jsonify(data), 200)
-    return res
+
    
 
 @app.route("/user", methods = ['DELETE'])
