@@ -1,4 +1,3 @@
-from itsdangerous import json
 import psycopg2
 from flask import Flask, make_response, request,jsonify
 from flask_cors import CORS
