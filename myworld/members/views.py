@@ -19,7 +19,7 @@ def add(request):
     return HttpResponse(template.render({}, request))
 
 # to add a new member record
-def addrecord(request):
+def addrecord(request):   
     received_firstname = request.POST['first'] 
     received_lastname = request.POST['last']
 
