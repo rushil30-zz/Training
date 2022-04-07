@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
-# from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader
 from .models import Members
 from django.urls import reverse 
@@ -7,16 +7,20 @@ from django.urls import reverse
 #to display all members
 def index(request):
     mymembers = Members.objects.all().values()
-    template = loader.get_template('index.html')
-    context = {
-        'mymembers':mymembers,
-    }
-    return HttpResponse(template.render(context, request))
+    # template = loader.get_template('index.html')
+    # context = {
+    #     'mymembers':mymembers,
+    # }
+    return render(request, "index.html", {'mymembers': mymembers})
+    # return HttpResponse(template.render(context, request))
 
 # adding member template
 def add(request):
-    template = loader.get_template('add.html')
-    return HttpResponse(template.render({}, request))
+    # template = loader.get_template('add.html')
+    # return HttpResponse(template.render({}, request))
+    return render(request, "add.html", {})
+    # return redirect("https://www.google.com")
+    # return redirect(delete, id="7")
 
 # to add a new member record
 def addrecord(request):   
