@@ -13,27 +13,27 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
-# adding member page
+# adding member template
 def add(request):
     template = loader.get_template('add.html')
     return HttpResponse(template.render({}, request))
 
-# to add a new member
+# to add a new member record
 def addrecord(request):
-    x = request.POST['first'] 
-    y = request.POST['last']
+    received_firstname = request.POST['first'] 
+    received_lastname = request.POST['last']
 
-    member = Members(firstname=x, lastname=y)
+    member = Members(firstname = received_firstname, lastname = received_lastname)
     member.save()
     return HttpResponseRedirect(reverse('index'))   
 
-# to delete a member
+# to delete a member record
 def delete(request, id):
     member = Members.objects.get(id=id)
     member.delete()
     return HttpResponseRedirect(reverse('index'))
 
-# updating member page
+# updating member template
 def update(request, id):
     mymember = Members.objects.get(id=id)
     template = loader.get_template('update.html')
@@ -42,7 +42,7 @@ def update(request, id):
     }    
     return HttpResponse(template.render(context, request))
 
-# to update a member:
+# to update a member record:
 def updaterecord(request, id):
     first = request.POST['first']
     last = request.POST['last']
