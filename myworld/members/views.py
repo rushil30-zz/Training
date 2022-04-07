@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from .models import Members
 from django.urls import reverse 
+from django.views.generic import TemplateView
 
 #to display all members
 def index(request):
@@ -84,3 +85,8 @@ def testing(request):
         'mymembers': mydata,
     } 
     return HttpResponse(template.render(context, request))
+
+
+# Django Generic View(Static Files)
+class StaticView(TemplateView):
+    template_name = 'static.html'
