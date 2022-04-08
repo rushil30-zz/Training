@@ -1,9 +1,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
-from .models import Members
+from .models import Members, Profile
 from django.urls import reverse 
 from django.views.generic import TemplateView
+from django.core.mail import send_mail
+from members.forms import LoginForm, ProfileForm
 
 #to display all members
 def index(request):
@@ -90,3 +92,44 @@ def testing(request):
 # Django Generic View(Static Files)
 class StaticView(TemplateView):
     template_name = 'static.html'
+
+
+# sending simple HTML E-mail:
+def sendEmail(request):
+    res = send_mail("hello paul", "paul@polo.com", ["polo@gmail.com"], html_message="Hello my name is Rushil")
+    return HttpResponse('%s'%res)
+
+
+# Django Form Processing
+def login(request):
+    username = 'not logged in'
+
+    if request.method == 'POST':
+        #Get the posted form
+        MyLoginForm = LoginForm(request.POST)
+
+        if MyLoginForm.is_valid():
+            username = MyLoginForm.cleaned_data['username']
+        else:
+            MyLoginForm = LoginForm()
+
+    return render(request, 'loggedin.html', {'username':username})            
+
+
+# Django File Uploading
+def SaveProfile(request):
+    saved = False
+
+    if request.method == "POST":
+        MyProfileForm = ProfileForm(request.POST, request.FILES)
+
+        if MyProfileForm.is_valid():
+            profile = Profile()
+            profile.name = MyProfileForm.cleaned_data['name']
+            profile.picture = MyProfileForm.cleaned_data['picture']
+            profile.save()
+            saved = True
+        else:
+            MyProfileForm = ProfileForm()    
+
+    return render(request, 'saved.html', locals())        

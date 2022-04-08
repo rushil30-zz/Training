@@ -1,0 +1,7 @@
+{% extends "main_template.html" %}
+{% block content %}
+Members:<p>
+{% for x in mymembers %}
+{{x.name}}</p>
+{% endfor %}
+{% endblock %}
