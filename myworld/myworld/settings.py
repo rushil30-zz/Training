@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'members.apps.MembersConfig'
+    'members.apps.MembersConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -124,11 +125,29 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ],
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ['v1'],
+    'VERSION_PARAM': 'version',
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+}
 
-EMAIL_HOST = 'smtp server'
-EMAIL_HOST_USER = 'Login credential for the smtp server'
-EMAIL_HOST_PASSWORD = 'Password credential for the smtp server'
-EMAIL_PORT = 'smtp server port'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'agarwalrushil98@gmail.com'
+EMAIL_HOST_PASSWORD = 'vbvmorqddpqncryl'
+EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 

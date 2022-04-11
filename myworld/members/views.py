@@ -6,33 +6,40 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 from django.core.mail import send_mail
 from members.forms import LoginForm, ProfileForm
+from django.views.decorators.csrf import csrf_exempt
+from members.serializer import MembersSerializer
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+from rest_framework.decorators import api_view
 
 #to display all members
 def index(request):
     mymembers = Members.objects.all().values()
-    # template = loader.get_template('index.html')
-    # context = {
-    #     'mymembers':mymembers,
-    # }
+    # print((mymembers))
     return render(request, "index.html", {'mymembers': mymembers})
-    # return HttpResponse(template.render(context, request))
 
 # adding member template
 def add(request):
-    # template = loader.get_template('add.html')
-    # return HttpResponse(template.render({}, request))
     return render(request, "add.html", {})
-    # return redirect("https://www.google.com")
-    # return redirect(delete, id="7")
 
 # to add a new member record
-def addrecord(request):   
-    received_firstname = request.POST['first'] 
-    received_lastname = request.POST['last']
+@csrf_exempt
+@api_view(("GET","POST"))
+def add_record(request): 
+    if request.method == 'GET':
+        return HttpResponseRedirect(reverse('index'))
 
-    member = Members(firstname = received_firstname, lastname = received_lastname)
-    member.save()
-    return HttpResponseRedirect(reverse('index'))   
+    elif request.method == 'POST':
+        members = request.data
+        print(members)
+        serializer = MembersSerializer(data=members)
+        if serializer.is_valid():
+            print("Helloo")
+            serializer.save()
+        else:
+            print((serializer.errors))
+            return Response(data = serializer.errors, status=400) 
+        return HttpResponseRedirect(reverse('index'))   
 
 # to delete a member record
 def delete(request, id):
@@ -80,8 +87,6 @@ def testing(request):
 
 # multiple order bys
     mydata = Members.objects.all().order_by('lastname', '-id').values()
-
-
     template = loader.get_template('testing_queries.html')
     context = {
         'mymembers': mydata,
@@ -94,9 +99,10 @@ class StaticView(TemplateView):
     template_name = 'static.html'
 
 
-# sending simple HTML E-mail:
+# sending simple E-mail:
 def sendEmail(request):
-    res = send_mail("hello paul", "paul@polo.com", ["polo@gmail.com"], html_message="Hello my name is Rushil")
+    print("Workingg.....")
+    res = send_mail('Subject here', 'Here is the message.', 'agarwalrushil98@gmail.com', ['agarwalrushil98@gmail.com'],fail_silently=True)
     return HttpResponse('%s'%res)
 
 
@@ -133,3 +139,42 @@ def SaveProfile(request):
             MyProfileForm = ProfileForm()    
 
     return render(request, 'saved.html', locals())        
+
+
+from django.core.mail import EmailMessage
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+
+from .forms import SendMailForm
+
+
+# Create your views here.
+def simple_send_mail(request):
+    if request.method == 'POST':
+        fm = SendMailForm(request.POST or None, request.FILES or None)
+        if fm.is_valid():
+            subject = fm.cleaned_data['subject']
+            message = fm.cleaned_data['msg']
+            from_mail = 'agarwalrushil@98gmail.com'
+            print(from_mail)
+            to_mail = fm.cleaned_data['email_id']
+            to_cc = fm.cleaned_data['email_cc']
+            to_bcc = fm.cleaned_data['email_bcc']
+            print(fm.cleaned_data)
+            attach = fm.cleaned_data['attachment']
+            if from_mail and to_mail:
+                try:
+                    mail = EmailMessage(subject=subject, body=message, from_email=from_mail, to=[to_mail], bcc=[to_bcc],
+                                        cc=[to_cc]
+                                        )
+                    mail.attach(attach.name, attach.read(), attach.content_type)
+                    mail.send()
+                # except Exception as ex:
+                except ArithmeticError as aex:
+                    print(aex.args)
+                    return HttpResponse('Invalid header found')
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                return HttpResponse('Make sure all fields are entered and valid.')
+    else:
+        fm = SendMailForm()
+    return render(request, 'send_mail.html', {'fm': fm})
