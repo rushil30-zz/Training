@@ -1,6 +1,6 @@
 1.  Get Sql dump file of Locallabs.
 2.  Create a new server in MySql.
-![Model](https://raw.githubusercontent.com/<rushil30>/<Training>/<main>/Enkei%20America/images/connection%20setup.png>)
+![connection setup](https://user-images.githubusercontent.com/102354574/163119915-f0da07da-aa69-4d23-99a2-785910c27ce6.png)
 4.  Create a new Database (locallab) in the newly created server. 
         \# create databse locallab;
 4.  Refresh the Schema (for checking if database exists or not).
@@ -15,3 +15,4 @@
         Select Start import button (bottom of dialog box).
 6.  Refresh the SCHEMAS.
 7.  All the data will be added to the locallab database.
+
