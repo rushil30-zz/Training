@@ -1,6 +1,6 @@
 1.  Get Sql dump file of Locallabs.
 2.  Create a new server in MySql.
-https://github.com/rushil30/Training/blob/main/Enkei%20America/images/connection%20setup.png
+![Alt text](https://github.com/rushil30/Training/blob/main/Enkei%20America/images/connection%20setup.pngraw=true "Connection Image")
 4.  Create a new Database (locallab) in the newly created server. 
         \# create databse locallab;
 4.  Refresh the Schema (for checking if database exists or not).
