@@ -1,6 +1,6 @@
 1.  Get Sql dump file of Locallabs.
 2.  Create a new server in MySql.
-![image](/images/connection%20setup.png raw=true "Connection Image")
+![image](/images/connection%20setup.pngraw=true "Connection Image")
 4.  Create a new Database (locallab) in the newly created server. 
         \# create databse locallab;
 4.  Refresh the Schema (for checking if database exists or not).
